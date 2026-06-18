@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仙侠福利中心</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,"PingFang SC";
+    background:#070b16;
+    color:#fff;
+}
+
+.container{
+    max-width:520px;
+    margin:auto;
+    padding:20px;
+}
+
+.header{
+    text-align:center;
+    padding:30px 10px;
+}
+
+.title{
+    font-size:26px;
+    font-weight:bold;
+}
+
+.sub{
+    color:#00f5ff;
+    margin-top:10px;
+}
+
+.tag{
+    display:inline-block;
+    margin-top:10px;
+    padding:5px 12px;
+    border-radius:20px;
+    background:rgba(0,245,255,0.1);
+    color:#00f5ff;
+    font-size:12px;
+}
+
+.card{
+    background:#121a2e;
+    margin-top:12px;
+    padding:14px;
+    border-radius:12px;
+}
+
+.card h3{
+    margin:0;
+    font-size:16px;
+}
+
+.card p{
+    margin:6px 0 0;
+    font-size:13px;
+    color:#aaa;
+}
+
+.stats{
+    display:flex;
+    margin-top:15px;
+    gap:10px;
+}
+
+.box{
+    flex:1;
+    background:#10182b;
+    padding:10px;
+    border-radius:10px;
+    text-align:center;
+}
+
+.num{
+    color:#00f5ff;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.btn{
+    width:100%;
+    margin-top:20px;
+    padding:16px;
+    border:none;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:bold;
+    background:linear-gradient(90deg,#00f5ff,#7c4dff);
+    color:#000;
+    display:none;
+}
+
+.small{
+    display:block;
+    margin-top:10px;
+    text-align:center;
+    color:#ccc;
+    text-decoration:none;
+    padding:12px;
+    border-radius:10px;
+    background:#1a2338;
+}
+
+.footer{
+    margin-top:20px;
+    text-align:center;
+    font-size:12px;
+    color:#666;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="title">🔥 2026仙侠福利中心</div>
+        <div class="sub">新服开启 · 福利领取 · 专属通道</div>
+        <div class="tag">限时开放中</div>
+    </div>
+
+    <div class="stats">
+        <div class="box">
+            <div class="num">12438</div>
+            <div>在线玩家</div>
+        </div>
+        <div class="box">
+            <div class="num">3216</div>
+            <div>今日新增</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>🎁 新手礼包</h3>
+        <p>装备 + 元宝 + 成长资源</p>
+    </div>
+
+    <div class="card">
+        <h3>⚔️ 开服冲榜奖励</h3>
+        <p>战力/等级排行榜奖励</p>
+    </div>
+
+    <div class="card">
+        <h3>🐉 坐骑福利</h3>
+        <p>仙侠新区专属坐骑</p>
+    </div>
+
+    <button id="mainBtn" class="btn">立即领取福利</button>
+
+    <a id="qq" class="small" href="#">加入玩家交流群</a>
+
+    <div class="footer">仙侠福利平台</div>
+
+</div>
+
+<script>
+
+const GAME_LINK = "https://file.a9wan.com/app/a9wan.apk?v=499";
+const QQ_LINK = "https://qm.qq.com/q/ei3IylRoBy";
+
+document.getElementById("qq").href = QQ_LINK;
+
+// 延迟显示按钮（提升点击）
+setTimeout(()=>{
+    document.getElementById("mainBtn").style.display = "block";
+},1500);
+
+// 点击跳转 + 记录
+document.getElementById("mainBtn").onclick = function(){
+    console.log("click_main_button");
+    window.location.href = GAME_LINK;
+};
+
+</script>
+
+</body>
+</html>
