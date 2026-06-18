@@ -1,96 +1,79 @@
-
- 
-<头>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>游戏下载中心</title>
 
-<样式>
-身体
-    边距：0;
-    字体：Arial，无衬线;
-    背景: #0f0f0f;
-    颜色: #fff;
-    文本对齐：居中;
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0f0f0f;
+    color:#fff;
+    text-align:center;
 }
 
-.容器 {
-     
+.container{
+    padding:40px 20px;
 }
 
-h1  {
-    字体大小：26px;
-    bottom外边距：10px;
+.card{
+    background:#1c1c1c;
+    padding:20px;
+    border-radius:12px;
+    max-width:420px;
+    margin:auto;
 }
 
-p {
-    颜色: #aaa;
+.btn{
+    display:block;
+    margin:12px 0;
+    padding:14px;
+    border-radius:8px;
+    font-weight:bold;
+    text-decoration:none;
+    color:#fff;
 }
 
-.card {
-    背景: #1c1c1c;
-    填充: 20px;
-    边框半径: 12px;
-    最大宽度：420像素；
-    margin: auto;
+.android{background:#2ecc71;}
+.ios{background:#3498db;}
+
+.tip{
+    font-size:13px;
+    color:#aaa;
+    margin-top:10px;
 }
 
-.btn {
-    display: block;
-    margin: 12px 0;
-    padding: 14px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    color: #fff;
+/* 弹窗 */
+.popup{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.85);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
 }
 
-.android {
-    background: #2ecc71;
-    transition: 0.3s;
+.box{
+    background:#fff;
+    color:#000;
+    padding:20px;
+    border-radius:12px;
+    width:280px;
 }
 
-.android.pulse {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
+.box img{
+    width:220px;
+    margin-top:10px;
 }
 
-.tip {
-    font-size: 13px;
-    color: #888;
-    margin-top: 10px;
-}
-
-/* 强制弹窗 */
-.popup {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.88);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-}
-
-.popup-box {
-    background: #fff;
-    color: #000;
-    padding: 20px;
-    border-radius: 12px;
-    width: 280px;
-    text-align: center;
-}
-
-.popup-box img {
-    width: 220px;
-    margin-top: 10px;
-}
-
-.close {
-    margin-top: 10px;
-    color: red;
-    cursor: pointer;
+.close{
+    margin-top:10px;
+    color:red;
+    cursor:pointer;
 }
 </style>
 </head>
@@ -99,26 +82,30 @@ p {
 
 <div class="container">
     <h1>游戏盒子下载中心</h1>
-    <p>系统正在自动为你匹配最佳方式</p>
+    <p>系统自动匹配你的设备</p>
 
     <div class="card">
 
-        <a id="androidBtn" class="btn android" href="https://file.a9wan.com/app/a9wan.apk?v=499">
-            📱 安卓下载（点击安装）
+        <a id="androidBtn" class="btn android" href="http://file.a9wan.com/app/a9wan.apk">
+            📱 安卓下载盒子
         </a>
 
-        <div class="tip">
-            🍎 iPhone 用户将自动弹出安装入口
+        <a id="iosBtn" class="btn ios" href="https://hetaobao.cn/vip/xlzm">
+            🍎 iPhone 点击安装
+        </a>
+
+        <div class="tip" id="tipText">
+            正在识别设备...
         </div>
 
     </div>
 </div>
 
-<!-- iOS强制弹窗 -->
+<!-- iOS弹窗 -->
 <div class="popup" id="popup">
-    <div class="popup-box">
+    <div class="box">
         <h3>iPhone安装入口</h3>
-        <p>请使用 Safari 扫码完成安装</p>
+        <p>请扫码安装</p>
 
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://hetaobao.cn/vip/xlzm"/>
 
@@ -127,59 +114,41 @@ p {
 </div>
 
 <script>
-let popupShown = false;
+function detect(){
 
-function detect() {
     const ua = navigator.userAgent.toLowerCase();
+
     const isAndroid = ua.includes("android");
     const isIOS = /iphone|ipad|ipod/.test(ua);
 
-const androidBtn = document.getElementById("androidBtn");
+    const tip = document.getElementById("tipText");
+    const androidBtn = document.getElementById("androidBtn");
 
-    // 安卓强化提示
-    if (isAndroid) {
-        setTimeout(() => {
-            androidBtn.classList.add("pulse");
-        }, 800);
+    if(isAndroid){
+        tip.innerText = "已检测安卓设备，点击即可下载";
     }
 
-    // iOS 强制弹窗逻辑
-    if (isIOS) {
-        androidBtn.style.display = "none";
+    if(isIOS){
+        androidBtn.style.display="none";
+        tip.innerText = "已检测iPhone设备";
 
-        setTimeout(() => {
-            showPopup();
-        }, 800);
+        // 只弹一次（避免骚扰）
+        setTimeout(()=>{
+            document.getElementById("popup").style.display="flex";
+        },800);
+    }
 
-        // 防流失：用户点击页面再次弹
-        document.body.addEventListener("click", function () {
-            if (!popupShown) {
-                showPopup();
-            }
-        });
+    if(!isAndroid && !isIOS){
+        tip.innerText="电脑用户可选择下载或扫码安装";
     }
 }
 
-function showPopup() {
-    popupShown = true;
-    document.getElementById("popup").style.display = "flex";
-
-    // 2秒后再提醒一次（轻提示）
-    setTimeout(() => {
-        popupShown = false;
-    }, 2000);
-}
-
-function closePopup() {
-    document.getElementById("popup").style.display = "none";
-
-    // 2秒后再弹一次（轻强制）
-    setTimeout(() => {
-        showPopup();
-    }, 2000);
+function closePopup(){
+    document.getElementById("popup").style.display="none";
 }
 
 detect();
 </script>
 
 </body>
+</html>
