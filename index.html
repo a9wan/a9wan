@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>游戏下载中心</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>游戏盒子下载中心</title>
 
 <style>
 body{
@@ -15,42 +15,67 @@ body{
 }
 
 .container{
-    padding:40px 20px;
+    padding:35px 20px;
+}
+
+.title{
+    font-size:26px;
+    font-weight:bold;
+}
+
+.sub{
+    color:#aaa;
+    margin-bottom:20px;
 }
 
 .card{
     background:#1c1c1c;
-    padding:20px;
-    border-radius:12px;
+    padding:22px;
+    border-radius:14px;
     max-width:420px;
     margin:auto;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
 }
 
 .btn{
     display:block;
-    margin:12px 0;
-    padding:14px;
-    border-radius:8px;
+    margin:14px 0;
+    padding:16px;
+    border-radius:10px;
     font-weight:bold;
     text-decoration:none;
     color:#fff;
+    font-size:16px;
 }
 
-.android{background:#2ecc71;}
-.ios{background:#3498db;}
+.android{
+    background:#2ecc71;
+    animation:pulse 1.5s infinite;
+}
+
+.ios{
+    background:#3498db;
+}
 
 .tip{
     font-size:13px;
-    color:#aaa;
+    color:#888;
     margin-top:10px;
 }
 
-/* 弹窗 */
+/* 呼吸动画（提升点击率） */
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.04);}
+    100%{transform:scale(1);}
+}
+
+/* iOS弹窗 */
 .popup{
     position:fixed;
     top:0;left:0;
     width:100%;height:100%;
-    background:rgba(0,0,0,0.85);
+    background:rgba(0,0,0,0.88);
     display:none;
     justify-content:center;
     align-items:center;
@@ -60,14 +85,19 @@ body{
 .box{
     background:#fff;
     color:#000;
-    padding:20px;
+    padding:18px;
     border-radius:12px;
-    width:280px;
+    width:300px;
 }
 
 .box img{
-    width:220px;
+    width:240px;
     margin-top:10px;
+}
+
+.small{
+    font-size:12px;
+    color:#666;
 }
 
 .close{
@@ -81,33 +111,33 @@ body{
 <body>
 
 <div class="container">
-    <h1>游戏盒子下载中心</h1>
-    <p>系统自动匹配你的设备</p>
+    <div class="title">游戏盒子下载中心</div>
+    <div class="sub">系统已为你匹配最佳安装方式</div>
 
     <div class="card">
 
         <a id="androidBtn" class="btn android" href="http://file.a9wan.com/app/a9wan.apk">
-            📱 安卓下载盒子
+            📱 安卓下载（点击立即安装）
         </a>
 
-        <a id="iosBtn" class="btn ios" href="https://hetaobao.cn/vip/xlzm">
-            🍎 iPhone 点击安装
+        <a id="iosBtn" class="btn ios" href="javascript:void(0)">
+            🍎 iPhone 点击安装（推荐）
         </a>
 
-        <div class="tip" id="tipText">
-            正在识别设备...
+        <div class="tip" id="tip">
+            正在识别你的设备...
         </div>
 
     </div>
 </div>
 
-<!-- iOS弹窗 -->
+<!-- iOS 强引导弹窗 -->
 <div class="popup" id="popup">
     <div class="box">
-        <h3>iPhone安装入口</h3>
-        <p>请扫码安装</p>
+        <h3>iPhone 安装入口</h3>
+        <div class="small">请使用 Safari 扫码完成安装</div>
 
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://hetaobao.cn/vip/xlzm"/>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://hetaobao.cn/vip/xlzm"/>
 
         <div class="close" onclick="closePopup()">关闭</div>
     </div>
@@ -121,21 +151,30 @@ function detect(){
     const isAndroid = ua.includes("android");
     const isIOS = /iphone|ipad|ipod/.test(ua);
 
-    const tip = document.getElementById("tipText");
     const androidBtn = document.getElementById("androidBtn");
+    const tip = document.getElementById("tip");
 
     if(isAndroid){
-        tip.innerText = "已检测安卓设备，点击即可下载";
+        tip.innerText = "检测到安卓设备，点击绿色按钮即可下载";
+
+        // 自动滚动 + 强提示
+        setTimeout(()=>{
+            androidBtn.scrollIntoView({behavior:"smooth"});
+        },600);
     }
 
     if(isIOS){
         androidBtn.style.display="none";
-        tip.innerText = "已检测iPhone设备";
+        tip.innerText = "检测到 iPhone，请点击蓝色按钮获取安装入口";
 
-        // 只弹一次（避免骚扰）
+        // 自动弹窗（核心转化）
         setTimeout(()=>{
             document.getElementById("popup").style.display="flex";
         },800);
+
+        document.getElementById("iosBtn").onclick = function(){
+            document.getElementById("popup").style.display="flex";
+        }
     }
 
     if(!isAndroid && !isIOS){
